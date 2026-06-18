@@ -1,0 +1,119 @@
+.welcome-screen {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Lueur de fond animée */
+.bg-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, rgba(160, 60, 255, 0.15) 0%, transparent 65%);
+  animation: bg-pulse 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes bg-pulse {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+/* Contenu centré */
+.welcome-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  z-index: 1;
+  padding: 24px;
+}
+
+/* Texte d'indication */
+.welcome-hint {
+  color: rgba(255, 255, 255, 0.55);
+  font-family: system-ui, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Bouton cadeau */
+.gift-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+/* Image du cadeau */
+.gift-image {
+  width: min(220px, 55vw);
+  height: min(220px, 55vw);
+  object-fit: contain;
+  filter: drop-shadow(0 0 24px rgba(200, 100, 255, 0.5));
+  display: block;
+}
+
+/* Animation secousse légère (1er clic) */
+@keyframes shake-light {
+  0%   { transform: rotate(0deg)   scale(1); }
+  15%  { transform: rotate(-9deg)  scale(1.06) translateY(-6px); }
+  30%  { transform: rotate(9deg)   scale(1.06) translateY(-4px); }
+  45%  { transform: rotate(-7deg)  scale(1.03); }
+  60%  { transform: rotate(7deg)   scale(1.03); }
+  75%  { transform: rotate(-4deg); }
+  90%  { transform: rotate(4deg); }
+  100% { transform: rotate(0deg)   scale(1); }
+}
+
+/* Animation secousse forte (2e clic) */
+@keyframes shake-heavy {
+  0%   { transform: rotate(0deg)    scale(1); }
+  10%  { transform: rotate(-14deg)  scale(1.1) translateY(-12px); }
+  25%  { transform: rotate(14deg)   scale(1.1) translateY(-8px); }
+  40%  { transform: rotate(-11deg)  scale(1.06) translateY(-6px); }
+  55%  { transform: rotate(11deg)   scale(1.06); }
+  68%  { transform: rotate(-7deg); }
+  80%  { transform: rotate(7deg); }
+  90%  { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg)    scale(1); }
+}
+
+.gift-image.shake-light {
+  animation: shake-light 0.65s ease-in-out;
+}
+
+.gift-image.shake-heavy {
+  animation: shake-heavy 0.65s ease-in-out;
+}
+
+/* Indicateurs de progression (3 points) */
+.click-dots {
+  display: flex;
+  gap: 14px;
+  margin-top: 4px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid rgba(200, 100, 255, 0.45);
+  transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.dot.dot-done {
+  background: #c87aff;
+  border-color: #c87aff;
+  box-shadow: 0 0 10px rgba(200, 100, 255, 0.9);
+}

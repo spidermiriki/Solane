@@ -1,0 +1,24 @@
+.homer-wrap {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  pointer-events: none;
+}
+
+.homer-img {
+  width: min(88px, 22vw);
+  height: auto;
+  display: block;
+}
+
+/* Animation de transformation : 5 rotations rapides (5/s) */
+@keyframes homer-flip {
+  0%   { transform: scaleX(1); }
+  50%  { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+
+.homer-flip .homer-img {
+  /* 0.2s par rotation × 5 = 1 s au total */
+  animation: homer-flip 0.2s ease-in-out 5;
+}

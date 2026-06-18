@@ -1,0 +1,87 @@
+.birthday-screen {
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 50%, #2a0a4a 0%, #0d0020 70%);
+  animation: screen-in 0.7s ease-out forwards;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes screen-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Lueur de fond */
+.bg-sparkle {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 25%, rgba(200, 80, 255, 0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 75%, rgba(255, 180, 0, 0.10) 0%, transparent 50%);
+  animation: sparkle-shift 6s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes sparkle-shift {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1;   transform: scale(1.05); }
+}
+
+/* Bloc titre + Solane — centré en haut */
+.birthday-content {
+  position: absolute;
+  top: 9%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+}
+
+/* Titre */
+.birthday-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(1.45rem, 7vw, 2.1rem);
+  color: #ffd700;
+  text-align: center;
+  line-height: 1.25;
+  white-space: nowrap;
+  animation: title-glow 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes title-glow {
+  from { text-shadow: 0 0 10px rgba(255, 215, 0, 0.45); }
+  to   { text-shadow: 0 0 26px rgba(255, 215, 0, 1), 0 0 52px rgba(255, 160, 0, 0.55); }
+}
+
+/* Image Solane */
+.solane-wrapper {
+  margin-top: 14px;
+}
+
+.solane-img {
+  width: min(100px, 52vw);
+  height: auto;
+  display: block;
+  transform-origin: center bottom;
+  animation: guitar-play 0.85s ease-in-out infinite;
+  filter: drop-shadow(0 0 14px rgba(200, 100, 255, 0.4));
+}
+
+/* Animation "joue de la guitare" */
+@keyframes guitar-play {
+  0%   { transform: rotate(-3deg)   translateY(0px); }
+  14%  { transform: rotate(0deg)    translateY(-7px) scaleX(1.02); }
+  28%  { transform: rotate(2.5deg)  translateY(-3px); }
+  43%  { transform: rotate(0deg)    translateY(-8px) scaleX(1.01); }
+  57%  { transform: rotate(-2deg)   translateY(-2px); }
+  71%  { transform: rotate(1.5deg)  translateY(-5px) scaleX(1.02); }
+  86%  { transform: rotate(-1deg)   translateY(-1px); }
+  100% { transform: rotate(-3deg)   translateY(0px); }
+}
