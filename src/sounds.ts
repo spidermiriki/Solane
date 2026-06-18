@@ -1,7 +1,16 @@
 /* Effets sonores générés par Web Audio API — aucun fichier audio requis */
 
-export function playTchouTchou() {
-  const ctx = new AudioContext()
+/* Contexte audio partagé — résout le blocage iOS Safari */
+let _ctx: AudioContext | null = null
+
+async function getCtx(): Promise<AudioContext> {
+  if (!_ctx || _ctx.state === 'closed') _ctx = new AudioContext()
+  if (_ctx.state === 'suspended') await _ctx.resume()
+  return _ctx
+}
+
+export async function playTchouTchou() {
+  const ctx = await getCtx()
 
   const whistle = (start: number, freq: number) => {
     const osc = ctx.createOscillator()
@@ -21,12 +30,10 @@ export function playTchouTchou() {
 
   whistle(ctx.currentTime, 640)
   whistle(ctx.currentTime + 0.32, 600)
-
-  setTimeout(() => ctx.close(), 1200)
 }
 
-export function playILoveYou() {
-  const ctx = new AudioContext()
+export async function playILoveYou() {
+  const ctx = await getCtx()
   // Do5 – Mi5 – Sol5 : arpège chaleureux
   const notes = [523.25, 659.25, 783.99]
   notes.forEach((freq, i) => {
@@ -44,11 +51,10 @@ export function playILoveYou() {
     osc.start(t)
     osc.stop(t + 0.58)
   })
-  setTimeout(() => ctx.close(), 1600)
 }
 
-export function playGiftClick() {
-  const ctx = new AudioContext()
+export async function playGiftClick() {
+  const ctx = await getCtx()
   const t = ctx.currentTime
 
   // Thump grave
@@ -76,12 +82,10 @@ export function playGiftClick() {
   gain2.connect(ctx.destination)
   osc2.start(t)
   osc2.stop(t + 0.12)
-
-  setTimeout(() => ctx.close(), 600)
 }
 
-export function playMagic() {
-  const ctx = new AudioContext()
+export async function playMagic() {
+  const ctx = await getCtx()
   const sparks = 12
   for (let i = 0; i < sparks; i++) {
     const osc = ctx.createOscillator()
@@ -98,5 +102,4 @@ export function playMagic() {
     osc.start(t)
     osc.stop(t + 0.35)
   }
-  setTimeout(() => ctx.close(), 2000)
 }
