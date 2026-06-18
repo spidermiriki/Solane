@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { playTchouTchou, playILoveYou } from '../sounds'
 import './HomerBounce.css'
 
 type HomerMode = 'homer' | 'tram'
@@ -93,10 +94,16 @@ export default function HomerBounce() {
     }
   }, [])
 
+  const handleClick = () => {
+    if (mode === 'tram') playTchouTchou()
+    else playILoveYou()
+  }
+
   return (
     <div
       className={`homer-wrap${flipping ? ' homer-flip' : ''}`}
       style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+      onClick={handleClick}
     >
       <img
         src={`${import.meta.env.BASE_URL}images/${mode === 'tram' ? 'homero_tram' : 'homero'}.png`}

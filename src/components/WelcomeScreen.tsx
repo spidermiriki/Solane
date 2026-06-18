@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { playGiftClick } from '../sounds'
 import './WelcomeScreen.css'
 
 const BASE = import.meta.env.BASE_URL
@@ -20,6 +21,8 @@ export default function WelcomeScreen({ onOpen }: Props) {
 
   const handleClick = () => {
     if (busy) return
+
+    playGiftClick()
 
     if (clickCount >= 2) {
       onOpen()

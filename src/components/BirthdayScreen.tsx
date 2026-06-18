@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import HomerBounce from './HomerBounce'
+import { playMagic } from '../sounds'
 import './BirthdayScreen.css'
 
 export default function BirthdayScreen() {
@@ -16,6 +17,7 @@ export default function BirthdayScreen() {
     <div className="birthday-screen">
       <audio ref={audioRef} src={`${import.meta.env.BASE_URL}sounds/guitare.ogg`} loop />
       <div className="bg-sparkle" />
+      <div className="spotlight" />
 
       {/* Titre + image Solane */}
       <div className="birthday-content">
@@ -27,6 +29,7 @@ export default function BirthdayScreen() {
             alt="Solane"
             className="solane-img"
             draggable={false}
+            onClick={playMagic}
           />
         </div>
       </div>
