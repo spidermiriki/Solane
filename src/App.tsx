@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import WelcomeScreen from './components/WelcomeScreen'
 import BurstScreen from './components/BurstScreen'
 import BirthdayScreen from './components/BirthdayScreen'
+import { initAudio } from './sounds'
 import './App.css'
 
 type Screen = 'welcome' | 'burst' | 'birthday'
@@ -23,7 +24,7 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app" onTouchStart={initAudio}>
       <audio ref={audioRef} src={`${import.meta.env.BASE_URL}sounds/music.mp3`} loop />
       {screen === 'welcome' && <WelcomeScreen onOpen={handleGiftOpen} />}
       {screen === 'burst' && <BurstScreen onComplete={handleBurstComplete} />}

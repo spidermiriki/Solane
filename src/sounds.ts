@@ -1,16 +1,36 @@
 /* Effets sonores générés par Web Audio API — aucun fichier audio requis */
 
-/* Contexte audio partagé — résout le blocage iOS Safari */
+/*
+ * iOS Safari bloque l'AudioContext jusqu'à un geste utilisateur.
+ * Pattern fiable : dès le premier touchstart sur l'appli, on crée le contexte,
+ * on appelle resume() ET on joue un buffer silencieux d'1 sample.
+ * Ce buffer force iOS à passer l'état à "running" avant que le vrai son soit déclenché.
+ * Appelle initAudio() sur onTouchStart du div racine.
+ */
 let _ctx: AudioContext | null = null
 
-async function getCtx(): Promise<AudioContext> {
+export function initAudio() {
+  if (_ctx && _ctx.state === 'running') return
   if (!_ctx || _ctx.state === 'closed') _ctx = new AudioContext()
-  if (_ctx.state === 'suspended') await _ctx.resume()
+  if (_ctx.state === 'suspended') _ctx.resume()
+  // Buffer silencieux — nécessaire sur iOS pour vraiment déverrouiller le contexte
+  const buf = _ctx.createBuffer(1, 1, 22050)
+  const src = _ctx.createBufferSource()
+  src.buffer = buf
+  src.connect(_ctx.destination)
+  src.start(0)
+}
+
+function getCtx(): AudioContext {
+  if (!_ctx || _ctx.state === 'closed') _ctx = new AudioContext()
+  if (_ctx.state === 'suspended') _ctx.resume()
   return _ctx
 }
 
-export async function playTchouTchou() {
-  const ctx = await getCtx()
+const DELAY = 0.1  // laisse le temps au resume() de prendre effet
+
+export function playTchouTchou() {
+  const ctx = getCtx()
 
   const whistle = (start: number, freq: number) => {
     const osc = ctx.createOscillator()
@@ -28,12 +48,13 @@ export async function playTchouTchou() {
     osc.stop(start + 0.28)
   }
 
-  whistle(ctx.currentTime, 640)
-  whistle(ctx.currentTime + 0.32, 600)
+  const t = ctx.currentTime + DELAY
+  whistle(t, 640)
+  whistle(t + 0.32, 600)
 }
 
-export async function playILoveYou() {
-  const ctx = await getCtx()
+export function playILoveYou() {
+  const ctx = getCtx()
   // Do5 – Mi5 – Sol5 : arpège chaleureux
   const notes = [523.25, 659.25, 783.99]
   notes.forEach((freq, i) => {
@@ -42,7 +63,7 @@ export async function playILoveYou() {
     osc.type = 'sine'
     osc.connect(gain)
     gain.connect(ctx.destination)
-    const t = ctx.currentTime + i * 0.16
+    const t = ctx.currentTime + DELAY + i * 0.16
     osc.frequency.value = freq
     gain.gain.setValueAtTime(0, t)
     gain.gain.linearRampToValueAtTime(0.3, t + 0.03)
@@ -53,9 +74,9 @@ export async function playILoveYou() {
   })
 }
 
-export async function playGiftClick() {
-  const ctx = await getCtx()
-  const t = ctx.currentTime
+export function playGiftClick() {
+  const ctx = getCtx()
+  const t = ctx.currentTime + DELAY
 
   // Thump grave
   const osc1 = ctx.createOscillator()
@@ -84,8 +105,8 @@ export async function playGiftClick() {
   osc2.stop(t + 0.12)
 }
 
-export async function playMagic() {
-  const ctx = await getCtx()
+export function playMagic() {
+  const ctx = getCtx()
   const sparks = 12
   for (let i = 0; i < sparks; i++) {
     const osc = ctx.createOscillator()
@@ -93,7 +114,7 @@ export async function playMagic() {
     osc.type = 'sine'
     osc.connect(gain)
     gain.connect(ctx.destination)
-    const t = ctx.currentTime + i * 0.045
+    const t = ctx.currentTime + DELAY + i * 0.045
     const startFreq = 500 + i * 140
     osc.frequency.setValueAtTime(startFreq, t)
     osc.frequency.exponentialRampToValueAtTime(startFreq * 3.2, t + 0.28)
